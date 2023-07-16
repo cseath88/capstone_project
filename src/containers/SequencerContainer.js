@@ -24,7 +24,6 @@ const createInitialGrid = () => {
 
     initialGrid.push(gridRow);
   }
-
   return initialGrid;
   
 };
@@ -60,6 +59,7 @@ const createInitialGrid = () => {
       (time, step) => {
         grid.forEach((row, rowIndex) => {
           const square = row[step];
+          console.log("step", step)
           console.log(square)
           if (square.isActive && square.sound) {
             SamplePlayer.triggerAttackRelease(square.sound, '8n', time);

@@ -1,6 +1,6 @@
-import { Sampler } from 'tone';
+import * as Tone from 'tone';
 
-const SamplePlayer = new Sampler({
+const SamplePlayer = new Tone.Sampler({
   urls: {
     A1: 'kick.wav',
     A2: 'snare.wav',
@@ -11,6 +11,9 @@ const SamplePlayer = new Sampler({
   baseUrl: 'http://localhost:3000/samples/',
   release: 1
 }).toDestination();
+
+console.log(SamplePlayer.baseUrl)
+
 
 
 
