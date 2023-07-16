@@ -1,3 +1,4 @@
+
 .grid {
   display: flex;
   flex-direction: column;
@@ -11,10 +12,14 @@
   width: 40px;
   height: 40px;
   background-color: #eaeaea;
-  border: 1px solid #ccc;
+  border: 1px solid #8b8a8a;
   transition: background-color 0.2s;
 }
 
 .grid-square.active {
-  background-color: #61dafb;
+  background-color: #85a1a8;
+}
+
+.current-step {
+  background-color: #b68d8d; 
 }

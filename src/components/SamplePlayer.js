@@ -10,12 +10,6 @@ const SamplePlayer = new Tone.Sampler({
   },
   baseUrl: 'http://localhost:3000/samples/',
   release: 1
-}).toDestination();
-
-
-
-
-
-
+}).toDestination()
 
 export default SamplePlayer;

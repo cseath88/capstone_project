@@ -1,8 +1,12 @@
-import React from 'react';
-import './Grid.css'
+import React, { useEffect, useState } from 'react';
+import './Grid.css';
 
-const Grid = ({ grid, onToggleSquare }) => {
+const Grid = ({ grid, onToggleSquare, stepCount }) => {
+  const [currentStep, setCurrentStep] = useState(-1)
 
+  useEffect(() => {
+    setCurrentStep(stepCount)
+  }, [stepCount])
 
   return (
     <div className="grid">
@@ -11,7 +15,9 @@ const Grid = ({ grid, onToggleSquare }) => {
           {row.map((square, squareIndex) => (
             <button
               key={squareIndex}
-              className={`grid-square ${square.isActive ? 'active' : ''}`}
+              className={`grid-square ${square.isActive ? 'active' : ''} ${
+                squareIndex === currentStep ? 'current-step' : ''
+              }`}
               onClick={() => onToggleSquare(rowIndex, squareIndex)}
             >
               {square.sound}
@@ -21,6 +27,6 @@ const Grid = ({ grid, onToggleSquare }) => {
       ))}
     </div>
   );
-}
+};
 
 export default Grid;
