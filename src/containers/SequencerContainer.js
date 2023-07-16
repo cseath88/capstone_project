@@ -6,28 +6,27 @@ import Grid from '../components/Grid';
 function SequencerContainer() {
 
   
-const createInitialGrid = () => {
-  const initialGrid = [];
-  const numSteps = 16;
-  const numRows = 5;
-
-  const sounds = Object.keys(SamplePlayer?.urls || {});
-  for (let row = 0; row < numRows; row++) {
-    const gridRow = [];
-
-    for (let step = 0; step < numSteps; step++) {
-      gridRow.push({
-        sound: sounds[row],
-        isActive: false,
-      });
-    }
-
-    initialGrid.push(gridRow);
-  }
-  console.log(initialGrid)
-  return initialGrid;
+  const createInitialGrid = () => {
+    const initialGrid = [];
+    const numSteps = 16;
+    const numRows = 5;
   
-};
+    const sounds = Object.values(SamplePlayer.loaded);
+    for (let row = 0; row < numRows; row++) {
+      const gridRow = [];
+  
+      for (let step = 0; step < numSteps; step++) {
+        gridRow.push({
+          sound: sounds[row],
+          isActive: false,
+        });
+      }
+  
+      initialGrid.push(gridRow);
+    }
+    console.log(initialGrid)
+    return initialGrid;
+  };
 
   const [grid, setGrid] = useState(createInitialGrid());
 
@@ -60,7 +59,6 @@ const createInitialGrid = () => {
       (time, step) => {
         grid.forEach((row, rowIndex) => {
           const square = row[step];
-          console.log("step", step)
           console.log(square)
           if (square.isActive && square.sound) {
             SamplePlayer.triggerAttackRelease(square.sound, '8n', time);
