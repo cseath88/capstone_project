@@ -12,7 +12,7 @@ const SamplePlayer = new Tone.Sampler({
   release: 1
 }).toDestination();
 
-console.log(SamplePlayer.baseUrl)
+
 
 
 

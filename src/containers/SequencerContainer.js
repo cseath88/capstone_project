@@ -4,29 +4,29 @@ import SamplePlayer from '../components/SamplePlayer';
 import Grid from '../components/Grid';
 
 function SequencerContainer() {
+  const [bpm, setBpm] = useState(120)
+    
+  const createInitialGrid = () => {
+    const initialGrid = [];
+    const numSteps = 16;
+    const numRows = 5;
 
-  
-const createInitialGrid = () => {
-  const initialGrid = [];
-  const numSteps = 16;
-  const numRows = 5;
+    const sounds = Object.keys(SamplePlayer?.urls || {});
+    for (let row = 0; row < numRows; row++) {
+      const gridRow = [];
 
-  const sounds = Object.keys(SamplePlayer?.urls || {});
-  for (let row = 0; row < numRows; row++) {
-    const gridRow = [];
+      for (let step = 0; step < numSteps; step++) {
+        gridRow.push({
+          sound: sounds[row],
+          isActive: false,
+        });
+      }
 
-    for (let step = 0; step < numSteps; step++) {
-      gridRow.push({
-        sound: sounds[row],
-        isActive: false,
-      });
+      initialGrid.push(gridRow);
     }
-
-    initialGrid.push(gridRow);
-  }
-  return initialGrid;
-  
-};
+    return initialGrid;
+    
+  };
 
   const [grid, setGrid] = useState(createInitialGrid());
 
@@ -54,6 +54,10 @@ const createInitialGrid = () => {
     };
   }, []);
 
+  useEffect(() => {
+    Tone.Transport.bpm.value = bpm; // Update the BPM value whenever it changes
+  }, [bpm]);
+
   const handlePlay = () => {
     const loop = new Tone.Sequence(
       (time, step) => {
@@ -78,11 +82,31 @@ const createInitialGrid = () => {
     Tone.Transport.stop()
   }
 
+  const handleBpmChange = (event) => {
+    const newBpm = parseInt(event.target.value);
+    setBpm(newBpm);
+    console.log(newBpm)
+  };
+
   return (
     <div>
       <Grid grid={grid} onToggleSquare={handleToggleSquare} />
       <button onClick={handlePlay}>Play</button>
       <button onClick={handleStop}>Stop</button>
+      <div>
+        <label>
+          BPM:
+          <input
+            type="range"
+            min="60"
+            max="200"
+            step="1"
+            value={bpm}
+            onChange={handleBpmChange}
+          />
+          {bpm} BPM
+        </label>
+      </div>
     </div>
   );
 }
