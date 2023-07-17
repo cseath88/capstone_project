@@ -7,27 +7,21 @@ import './SequencerContainer.css';
 function SequencerContainer() {
 
   const [bpm, setBpm] = useState(120)
-  const [pingPongDelayFeedback, setPingPongDelayFeedback] = useState(0)
-  const [reverbDecay, setReverbDecay] = useState(2)
   const [stepCount, setStepCount] = useState(0)
-  const [isPingPongDelayActive, setIsPingPongDelayActive] = useState(false)
-  const [isReverbActive, setIsReverbActive] = useState(false)
-  
 
+  
   const createInitialGrid = () => {
     const initialGrid = []
     const numSteps = 16
     const numRows = 5
 
-    const sounds = Object.keys(SamplePlayer?.urls || {})
     for (let row = 0; row < numRows; row++) {
       const gridRow = []
       for (let step = 0; step < numSteps; step++) {
         gridRow.push({
-          sound: sounds[row],
+          sound: null,
           isActive: false,
         })
-        console.log("Sounds", sounds)
       }
 
       initialGrid.push(gridRow)
@@ -35,9 +29,8 @@ function SequencerContainer() {
     return initialGrid
     
   }
-  // console.log(SamplePlayer)
 
-  const [grid, setGrid] = useState(createInitialGrid())
+  const [grid, setGrid] = useState(createInitialGrid)
 
 
   const handleToggleSquare = (rowIndex, squareIndex) => {
@@ -46,13 +39,13 @@ function SequencerContainer() {
         currRowIndex === rowIndex
           ? row.map((square, currSquareIndex) =>
               currSquareIndex === squareIndex
-                ? { sound: "A1", isActive: !square.isActive }
+                ? { ...square, isActive: !square.isActive } // Toggle the isActive property
                 : square
             )
           : row
       )
-    )
-  }
+    );
+  };
 
 
   const startAudioContext = () => {
@@ -65,8 +58,10 @@ function SequencerContainer() {
   useEffect(() => {
     document.addEventListener('mousedown', startAudioContext);
     return () => {
-      document.removeEventListener('mousedown', startAudioContext);
+      // document.removeEventListener('mousedown', startAudioContext);
     };
+
+
   }, []);
 
   useEffect(() => {
@@ -77,18 +72,12 @@ function SequencerContainer() {
   const handlePlay = () => {
     const loop = new Tone.Sequence(
       (time, step) => {
-        // grid.forEach((row, rowIndex) => {
-        //   const square = row[step]
-        //   console.log("step", step)
-        //   console.log(square)
-        //   // if (square.isActive && square.sound) {
-        //     console.log(time)
             SamplePlayer.triggerAttackRelease(step, '8n', time)
-          // }
-        // })
         setStepCount(step)
       },
-      Array.from({ length: 16 }, (_, i) => grid[0][i].sound || null), 
+      Array.from({ length: 16 }, (_, i) =>
+      grid.map((row) => row[i].sound)
+      ),
       '8n' 
     )
     loop.start(0)
@@ -100,39 +89,6 @@ function SequencerContainer() {
     Tone.Transport.stop()
   }
 
-
-  // const pingPongDelay = new Tone.PingPongDelay({
-  //   feedback: pingPongDelayFeedback,
-  //   wet: isPingPongDelayActive ? 0.3 : 0, 
-  // }).toDestination()
-
-  // const reverb = new Tone.Reverb({
-  //   decay: reverbDecay,
-  //   wet: isReverbActive ? 0.2 : 0, 
-  // }).toDestination()
-
-  // SamplePlayer.connect(pingPongDelay);
-  // SamplePlayer.connect(reverb);
-
-  const togglePingPongDelay = () => {
-    setIsPingPongDelayActive((prevValue) => !prevValue)
-  }
-
-  // const toggleReverb = () => {
-  //   setIsReverbActive((prevValue) => !prevValue)
-  // }
-
-  // const handlePingPongDelayFeedbackChange = (event) => {
-  //   const newFeedback = parseFloat(event.target.value)
-  //   setPingPongDelayFeedback(newFeedback)
-  //   pingPongDelay.feedback.value = newFeedback
-  // }
-
-  // const handleReverbDecayChange = (event) => {
-  //   const newDecay = parseFloat(event.target.value)
-  //   setReverbDecay(newDecay)
-  //   reverb.decay = newDecay
-  // }
 
   const handleBpmChange = (event) => {
     const newBpm = parseInt(event.target.value)
@@ -166,37 +122,6 @@ function SequencerContainer() {
           />
           {bpm} BPM
         </label>
-      <h2>Effects</h2>
-        {/* <label>
-          PingPong Delay Feedback:
-          <input
-            type="range"
-            min="0"
-            max="0.9"
-            step="0.01"
-            value={pingPongDelayFeedback}
-            onChange={handlePingPongDelayFeedbackChange}
-          />
-          {pingPongDelayFeedback}
-        </label> */}
-        {/* <button onClick={togglePingPongDelay}>
-          {isPingPongDelayActive ? <i className="fas fa-toggle-off"></i> : <i className="fas fa-toggle-on"></i>}
-        </button> */}
-        {/* <label>
-          Reverb Decay:
-          <input
-            type="range"
-            min="0.1"
-            max="10"
-            step="0.1"
-            value={reverbDecay}
-            onChange={handleReverbDecayChange}
-          />
-          {reverbDecay}
-        </label>
-        <button onClick={toggleReverb}>
-          {isReverbActive ? <i className="fas fa-toggle-off"></i> : <i className="fas fa-toggle-on"></i>}
-        </button> */}
       </div>
     </div>
   );

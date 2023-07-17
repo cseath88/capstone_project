@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './Grid.css';
 
 const Grid = ({ grid, onToggleSquare, stepCount }) => {
-  const [currentStep, setCurrentStep] = useState(-1)
+  const [currentStep, setCurrentStep] = useState(-1);
 
   useEffect(() => {
-    setCurrentStep(stepCount)
-  }, [stepCount])
+    setCurrentStep(stepCount);
+  }, [stepCount]);
 
   return (
     <div className="grid">
