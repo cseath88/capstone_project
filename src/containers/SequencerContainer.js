@@ -8,7 +8,8 @@ function SequencerContainer() {
   const [pingPongDelayFeedback, setPingPongDelayFeedback] = useState(0)
   const [reverbDecay, setReverbDecay] = useState(2)
   const [stepCount, setStepCount] = useState(0)
-    
+  
+
   const createInitialGrid = () => {
     const initialGrid = []
     const numSteps = 16
@@ -66,8 +67,8 @@ function SequencerContainer() {
       (time, step) => {
         grid.forEach((row, rowIndex) => {
           const square = row[step]
-          console.log("step", step)
-          console.log(square)
+          // console.log("step", step)
+          // console.log(square)
           if (square.isActive && square.sound) {
             SamplePlayer.triggerAttackRelease(square.sound, '8n', time)
           }
@@ -97,8 +98,8 @@ function SequencerContainer() {
     wet: 0.2, 
   }).toDestination()
 
-  SamplePlayer.connect(pingPongDelay)
-  SamplePlayer.connect(reverb)
+  SamplePlayer.connect(pingPongDelay);
+  SamplePlayer.connect(reverb);
 
   const handlePingPongDelayFeedbackChange = (event) => {
     const newFeedback = parseFloat(event.target.value)
@@ -138,6 +139,7 @@ function SequencerContainer() {
         </label>
       </div>
       <div>
+      <h2>Effects</h2>
         <label>
           PingPong Delay Feedback:
           <input
@@ -166,7 +168,7 @@ function SequencerContainer() {
         </label>
       </div>
     </div>
-  )
+  );
 }
 
 export default SequencerContainer;
