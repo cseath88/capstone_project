@@ -5,6 +5,7 @@ import Grid from '../components/Grid';
 import './SequencerContainer.css';
 
 function SequencerContainer() {
+
   const [bpm, setBpm] = useState(120)
   const [pingPongDelayFeedback, setPingPongDelayFeedback] = useState(0)
   const [reverbDecay, setReverbDecay] = useState(2)
@@ -21,12 +22,12 @@ function SequencerContainer() {
     const sounds = Object.keys(SamplePlayer?.urls || {})
     for (let row = 0; row < numRows; row++) {
       const gridRow = []
-
       for (let step = 0; step < numSteps; step++) {
         gridRow.push({
           sound: sounds[row],
           isActive: false,
         })
+        console.log("Sounds", sounds)
       }
 
       initialGrid.push(gridRow)
@@ -34,8 +35,10 @@ function SequencerContainer() {
     return initialGrid
     
   }
+  // console.log(SamplePlayer)
 
   const [grid, setGrid] = useState(createInitialGrid())
+
 
   const handleToggleSquare = (rowIndex, squareIndex) => {
     setGrid((prevGrid) =>
@@ -43,7 +46,7 @@ function SequencerContainer() {
         currRowIndex === rowIndex
           ? row.map((square, currSquareIndex) =>
               currSquareIndex === squareIndex
-                ? { ...square, isActive: !square.isActive }
+                ? { sound: "A1", isActive: !square.isActive }
                 : square
             )
           : row
@@ -51,14 +54,13 @@ function SequencerContainer() {
     )
   }
 
+
   const startAudioContext = () => {
     Tone.start().then(() => {
-      console.log('Audio context successfully started.');
-      console.log('Audio context state:', Tone.context.state);
     }).catch((error) => {
-      console.error('Audio context failed to start:', error);
     });
   };
+
 
   useEffect(() => {
     document.addEventListener('mousedown', startAudioContext);
@@ -71,25 +73,26 @@ function SequencerContainer() {
     Tone.Transport.bpm.value = bpm
   }, [bpm])
 
+
   const handlePlay = () => {
     const loop = new Tone.Sequence(
       (time, step) => {
-        grid.forEach((row, rowIndex) => {
-          const square = row[step]
-          // console.log("step", step)
-          // console.log(square)
-          if (square.isActive && square.sound) {
-            SamplePlayer.triggerAttackRelease(square.sound, '8n', time)
-          }
-        })
+        // grid.forEach((row, rowIndex) => {
+        //   const square = row[step]
+        //   console.log("step", step)
+        //   console.log(square)
+        //   // if (square.isActive && square.sound) {
+        //     console.log(time)
+            SamplePlayer.triggerAttackRelease(step, '8n', time)
+          // }
+        // })
         setStepCount(step)
       },
-      Array.from({ length: 16 }, (_, i) => i), 
+      Array.from({ length: 16 }, (_, i) => grid[0][i].sound || null), 
       '8n' 
     )
-  
+    loop.start(0)
     Tone.Transport.start()
-    loop.start()
   }
 
 
@@ -97,44 +100,47 @@ function SequencerContainer() {
     Tone.Transport.stop()
   }
 
-  const pingPongDelay = new Tone.PingPongDelay({
-    feedback: pingPongDelayFeedback,
-    wet: isPingPongDelayActive ? 0.3 : 0, 
-  }).toDestination()
 
-  const reverb = new Tone.Reverb({
-    decay: reverbDecay,
-    wet: isReverbActive ? 0.2 : 0, 
-  }).toDestination()
+  // const pingPongDelay = new Tone.PingPongDelay({
+  //   feedback: pingPongDelayFeedback,
+  //   wet: isPingPongDelayActive ? 0.3 : 0, 
+  // }).toDestination()
 
-  SamplePlayer.connect(pingPongDelay);
-  SamplePlayer.connect(reverb);
+  // const reverb = new Tone.Reverb({
+  //   decay: reverbDecay,
+  //   wet: isReverbActive ? 0.2 : 0, 
+  // }).toDestination()
+
+  // SamplePlayer.connect(pingPongDelay);
+  // SamplePlayer.connect(reverb);
 
   const togglePingPongDelay = () => {
     setIsPingPongDelayActive((prevValue) => !prevValue)
   }
 
-  const toggleReverb = () => {
-    setIsReverbActive((prevValue) => !prevValue)
-  }
+  // const toggleReverb = () => {
+  //   setIsReverbActive((prevValue) => !prevValue)
+  // }
 
-  const handlePingPongDelayFeedbackChange = (event) => {
-    const newFeedback = parseFloat(event.target.value)
-    setPingPongDelayFeedback(newFeedback)
-    pingPongDelay.feedback.value = newFeedback
-  }
+  // const handlePingPongDelayFeedbackChange = (event) => {
+  //   const newFeedback = parseFloat(event.target.value)
+  //   setPingPongDelayFeedback(newFeedback)
+  //   pingPongDelay.feedback.value = newFeedback
+  // }
 
-  const handleReverbDecayChange = (event) => {
-    const newDecay = parseFloat(event.target.value)
-    setReverbDecay(newDecay)
-    reverb.decay = newDecay
-  }
+  // const handleReverbDecayChange = (event) => {
+  //   const newDecay = parseFloat(event.target.value)
+  //   setReverbDecay(newDecay)
+  //   reverb.decay = newDecay
+  // }
 
   const handleBpmChange = (event) => {
     const newBpm = parseInt(event.target.value)
     setBpm(newBpm)
     console.log(newBpm)
   }
+
+
 
   return (
     <div className='sequencer-container'>
@@ -161,7 +167,7 @@ function SequencerContainer() {
           {bpm} BPM
         </label>
       <h2>Effects</h2>
-        <label>
+        {/* <label>
           PingPong Delay Feedback:
           <input
             type="range"
@@ -172,11 +178,11 @@ function SequencerContainer() {
             onChange={handlePingPongDelayFeedbackChange}
           />
           {pingPongDelayFeedback}
-        </label>
-        <button onClick={togglePingPongDelay}>
+        </label> */}
+        {/* <button onClick={togglePingPongDelay}>
           {isPingPongDelayActive ? <i className="fas fa-toggle-off"></i> : <i className="fas fa-toggle-on"></i>}
-        </button>
-        <label>
+        </button> */}
+        {/* <label>
           Reverb Decay:
           <input
             type="range"
@@ -190,7 +196,7 @@ function SequencerContainer() {
         </label>
         <button onClick={toggleReverb}>
           {isReverbActive ? <i className="fas fa-toggle-off"></i> : <i className="fas fa-toggle-on"></i>}
-        </button>
+        </button> */}
       </div>
     </div>
   );
