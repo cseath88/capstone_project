@@ -8,7 +8,7 @@ const SamplePlayer = new Tone.Sampler({
     A4: 'shaker.wav',
     A5: 'clap.wav'
   },
-  baseUrl: 'http://localhost:3000/samples/',
+  baseUrl: 'http://localhost:3000/',
   release: 1
 }).toDestination()
 

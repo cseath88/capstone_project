@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import * as Tone from 'tone';
 import SamplePlayer from '../components/SamplePlayer';
 import Grid from '../components/Grid';
+import './SequencerContainer.css';
 
 function SequencerContainer() {
   const [bpm, setBpm] = useState(120)
   const [pingPongDelayFeedback, setPingPongDelayFeedback] = useState(0)
   const [reverbDecay, setReverbDecay] = useState(2)
   const [stepCount, setStepCount] = useState(0)
+  const [isPingPongDelayActive, setIsPingPongDelayActive] = useState(false)
+  const [isReverbActive, setIsReverbActive] = useState(false)
   
 
   const createInitialGrid = () => {
@@ -48,15 +51,21 @@ function SequencerContainer() {
     )
   }
 
+  const startAudioContext = () => {
+    Tone.start().then(() => {
+      console.log('Audio context successfully started.');
+      console.log('Audio context state:', Tone.context.state);
+    }).catch((error) => {
+      console.error('Audio context failed to start:', error);
+    });
+  };
+
   useEffect(() => {
-    const startAudioContext = () => {
-      Tone.start()
-    }
-    document.addEventListener('mousedown', startAudioContext)
+    document.addEventListener('mousedown', startAudioContext);
     return () => {
-      document.removeEventListener('mousedown', startAudioContext)
-    }
-  }, [])
+      document.removeEventListener('mousedown', startAudioContext);
+    };
+  }, []);
 
   useEffect(() => {
     Tone.Transport.bpm.value = bpm
@@ -90,16 +99,24 @@ function SequencerContainer() {
 
   const pingPongDelay = new Tone.PingPongDelay({
     feedback: pingPongDelayFeedback,
-    wet: 0.3, 
+    wet: isPingPongDelayActive ? 0.3 : 0, 
   }).toDestination()
 
   const reverb = new Tone.Reverb({
     decay: reverbDecay,
-    wet: 0.2, 
+    wet: isReverbActive ? 0.2 : 0, 
   }).toDestination()
 
   SamplePlayer.connect(pingPongDelay);
   SamplePlayer.connect(reverb);
+
+  const togglePingPongDelay = () => {
+    setIsPingPongDelayActive((prevValue) => !prevValue)
+  }
+
+  const toggleReverb = () => {
+    setIsReverbActive((prevValue) => !prevValue)
+  }
 
   const handlePingPongDelayFeedbackChange = (event) => {
     const newFeedback = parseFloat(event.target.value)
@@ -120,11 +137,17 @@ function SequencerContainer() {
   }
 
   return (
-    <div>
-      <Grid grid={grid} onToggleSquare={handleToggleSquare} stepCount={stepCount} />
-      <button onClick={handlePlay}>Play</button>
-      <button onClick={handleStop}>Stop</button>
-      <div>
+    <div className='sequencer-container'>
+      <div className='grid-container'>
+        <Grid grid={grid} onToggleSquare={handleToggleSquare} stepCount={stepCount} />
+      </div>
+      <div className='controls-container'>
+        <button onClick={handlePlay}>
+          <i className="fas fa-play"></i>
+        </button>
+        <button onClick={handleStop}>
+          <i className="fas fa-stop"></i>
+        </button>
         <label>
           BPM:
           <input
@@ -137,8 +160,6 @@ function SequencerContainer() {
           />
           {bpm} BPM
         </label>
-      </div>
-      <div>
       <h2>Effects</h2>
         <label>
           PingPong Delay Feedback:
@@ -152,8 +173,9 @@ function SequencerContainer() {
           />
           {pingPongDelayFeedback}
         </label>
-      </div>
-      <div>
+        <button onClick={togglePingPongDelay}>
+          {isPingPongDelayActive ? <i className="fas fa-toggle-off"></i> : <i className="fas fa-toggle-on"></i>}
+        </button>
         <label>
           Reverb Decay:
           <input
@@ -166,6 +188,9 @@ function SequencerContainer() {
           />
           {reverbDecay}
         </label>
+        <button onClick={toggleReverb}>
+          {isReverbActive ? <i className="fas fa-toggle-off"></i> : <i className="fas fa-toggle-on"></i>}
+        </button>
       </div>
     </div>
   );
