@@ -15,12 +15,12 @@ const Grid = ({ grid, onToggleSquare, stepCount }) => {
           {row.map((square, squareIndex) => (
             <button
               key={squareIndex}
-              className={`grid-square ${square.isActive ? 'active' : ''} ${
+              className={`grid-square ${square ? 'active' : ''} ${
                 squareIndex === currentStep ? 'current-step' : ''
               }`}
               onClick={() => onToggleSquare(rowIndex, squareIndex)}
             >
-              {square.sound}
+              <span>{square}</span>
             </button>
           ))}
         </div>
