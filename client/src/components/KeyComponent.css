@@ -1,0 +1,31 @@
+.key-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-right: 20px;
+}
+
+.key-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.color-box {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.yellow .color-box {
+  background-color: #f0c987;
+}
+
+.green .color-box {
+  background-color: #a3d9c5;
+}
+
+.red .color-box {
+  background-color: #d9a3a3;
+}

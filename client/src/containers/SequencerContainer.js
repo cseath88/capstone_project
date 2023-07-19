@@ -5,12 +5,13 @@ import Grid from '../components/Grid';
 import './SequencerContainer.css';
 import PresetService from '../services/PresetsService';
 import PresetForm from '../components/PresetForm';
+import KeyComponent from '../components/KeyComponent';
 
 function SequencerContainer( {savePresetData} ) {
 
   const [bpm, setBpm] = useState(120)
   const [stepCount, setStepCount] = useState(0)
-  const [selectedPreset, setSelectedPreset] = useState(null);
+  // const [selectedPreset, setSelectedPreset] = useState(null);
 
   const [selectedPresetBpm, setSelectedPresetBpm] = useState(120);
 
@@ -131,6 +132,7 @@ function SequencerContainer( {savePresetData} ) {
         <Grid grid={grid} onToggleSquare={handleToggleSquare} stepCount={stepCount} />
       </div>
       <div className='controls-container'>
+      <KeyComponent />
         <div className='playback-controls'>
           <button onClick={handlePlay}>
             <i className="fas fa-play"></i>
