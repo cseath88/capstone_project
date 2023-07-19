@@ -6,14 +6,15 @@ const SamplePlayer = new Tone.Sampler({
     A2: 'hihat.wav',
     A3: 'hihat2.wav',
     A4: 'snare.wav',
-    A5: 'sample1.wav',
-    A6: 'sample3.wav',
-    A7: 'sample4.wav',
-    A8: 'sample5.wav',
-    A9: 'sample6.wav',
-    A10: 'vox1.wav',
+    A5: 'bass2.wav',
+    A6: 'bass3.wav',
+    A7: 'plink2.wav',
+    A8: 'guitar1.wav',
+    A9: 'plink.wav',
+    A10: 'vocals1.wav',
     A11: 'vox2.wav',
-    A12: 'vox3.wav'
+    A12: 'vocals3.wav',
+    A13: 'vocals4.wav'
   },
   baseUrl: 'http://localhost:3000/samples/',
   release: 1

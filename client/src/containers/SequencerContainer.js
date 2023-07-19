@@ -7,11 +7,10 @@ import PresetService from '../services/PresetsService';
 import PresetForm from '../components/PresetForm';
 import KeyComponent from '../components/KeyComponent';
 
-function SequencerContainer( {savePresetData} ) {
+function SequencerContainer() {
 
   const [bpm, setBpm] = useState(120)
   const [stepCount, setStepCount] = useState(0)
-  // const [selectedPreset, setSelectedPreset] = useState(null);
 
   const [selectedPresetBpm, setSelectedPresetBpm] = useState(120);
 
@@ -74,6 +73,9 @@ function SequencerContainer( {savePresetData} ) {
     Tone.Transport.bpm.value = bpm
   }, [bpm])
 
+
+  const loopRef = useRef(null)
+
   const handlePlay = () => {
     if (loopRef.current) {
       loopRef.current.dispose();
@@ -92,10 +94,10 @@ function SequencerContainer( {savePresetData} ) {
     loopRef.current = loop;
     loop.start(0);
     Tone.Transport.start();
+    console.log("Loopy", loopRef)
   };
   
 
-  const loopRef = useRef(null)
   const handleStop = () => {
     if (loopRef.current) {
       loopRef.current.dispose()
