@@ -72,7 +72,7 @@
 }
 
 .preset-form input[type="text"] {
-  width: 100%;
+  width: 80%;
   padding: 5px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -82,7 +82,7 @@
 
 .preset-form button {
   background-color: #a3d9c5;
-  color: #fff;
+  color: #000000;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;

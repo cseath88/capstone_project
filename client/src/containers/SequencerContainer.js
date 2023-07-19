@@ -155,7 +155,7 @@ function SequencerContainer( {savePresetData} ) {
           </button>
         </div>
         <div className='preset-form'>
-          <PresetForm presets={presets} setPresets={setPresets} bpm={bpm} grid={grid} onPresetSelect={handlePresetSelect} />
+          <PresetForm presets={presets} setPresets={setPresets} bpm={bpm} grid={grid} onPresetSelect={handlePresetSelect} onDeleteClear={handleClear} />
         </div>
       </div>
     </div>

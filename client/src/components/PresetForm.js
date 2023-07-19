@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PresetService from '../services/PresetsService';
 
-const PresetForm = ({ presets, setPresets, bpm, grid, onPresetSelect }) => {
+const PresetForm = ({ presets, setPresets, bpm, grid, onPresetSelect, onDeleteClear }) => {
   const [presetForm, setPresetForm] = useState({
     "name": '',
     "bpm": bpm
@@ -51,6 +51,8 @@ const PresetForm = ({ presets, setPresets, bpm, grid, onPresetSelect }) => {
       .catch((error) => {
         console.error('Error deleting preset:', error);
       });
+      onDeleteClear(grid)
+
   };
 
   const handlePresetSelect = (event) => {
@@ -64,7 +66,7 @@ const PresetForm = ({ presets, setPresets, bpm, grid, onPresetSelect }) => {
     <form onSubmit={handlePresetSubmit}>
       <div>
         <label>
-          Preset Name:
+          New Preset Name:
           <input
             type="text"
             name="name"
@@ -77,7 +79,7 @@ const PresetForm = ({ presets, setPresets, bpm, grid, onPresetSelect }) => {
         <button type="submit">Save Preset</button>
       </div>
       <div>
-        <label>Select a preset:</label>
+        <label>Select a saved preset:</label>
         <select onChange={handlePresetSelect}>
           <option value="">Select a preset</option>
           {presets.map((preset) => (
@@ -96,7 +98,6 @@ const PresetForm = ({ presets, setPresets, bpm, grid, onPresetSelect }) => {
       </div>
       {selectedPreset && (
         <div>
-          <h2>Selected Preset Details</h2>
           <p>Name: {selectedPreset.name}</p>
         </div>
       )}

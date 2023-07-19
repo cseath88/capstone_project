@@ -1,5 +1,5 @@
 const express = require('express');
-const ObjectID = require('mongodb').ObjectID;
+const ObjectID = require('mongodb').ObjectId;
 
 const createRouter = function (collection) {
 
@@ -44,7 +44,8 @@ const createRouter = function (collection) {
 
   router.delete('/:id', (req, res) => {
     const id = req.params.id
-    collection.deleteOne({ _id: ObjectID(id) })
+    const objectId = new ObjectID(id)
+    collection.deleteOne({ _id: objectId })
     .then((doc) => res.json(doc))
   })
 
